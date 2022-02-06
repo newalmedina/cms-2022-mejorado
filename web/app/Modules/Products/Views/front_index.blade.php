@@ -12,10 +12,11 @@
 <link href="{{ asset('/assets/front/vendor/datatables.net/css/responsive.bootstrap4.min.css') }}" rel="stylesheet"
     type="text/css" />
 
+
 @stop
 
 @section('breadcrumb')
-<li class="breadcrumb-item active"><a href="#">{{ $page_title }}</a></li>
+<li class="breadcrumb-item active">{{ $page_title }}</li>
 @stop
 
 @section('content')
@@ -30,7 +31,7 @@
     <div class="col-12">
         <div class="card card-featured-top card-featured-secondary">
             <div class="card-header with-border">
-                <h3 class="card-title">{{ trans('Categories::categories/front_lang.listado') }}</h3>
+                <h3 class="card-title">{{ trans('Products::products/front_lang.listado') }}</h3>
             </div>
 
             <div class="card-body">
@@ -50,24 +51,25 @@
 
                 </div>
                 <div class="pull-right">
-                    @if(Auth::user()->isAbleTo("front-categories-create"))
-                    <a href="{{ url('front/categories/create') }}" class="btn btn-success pull-right"><i
+                    @if(Auth::user()->isAbleTo("front-products-create"))
+                    <a href="{{ url('front/products/create') }}" class="btn btn-success pull-right"><i
                             class="fa fa-plus-circle" aria-hidden="true"></i> {{
-                        trans('Categories::categories/front_lang.nueva') }}</a>
+                        trans('Products::products/front_lang.nueva') }}</a>
                     @endif
                 </div>
             </div>
 
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="table_categories" class="table table-bordered table-striped" aria-hidden="true">
+                <table id="table_products" class="table table-bordered table-striped" aria-hidden="true">
                     <thead>
                         <tr>
                             <th scope="col">
                             <th scope="col">
                             <th scope="col">
-
                             <th scope="col">
+                            <th scope="col">
+
                             <th scope="col">
                         </tr>
                     </thead>
@@ -75,6 +77,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th scope="col">
                             <th scope="col">
                             <th scope="col">
                             <th scope="col">
@@ -97,13 +100,12 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">{{ trans("Categories::categories/front_lang.export") }}</h3>
+                <h3 class="card-title">{{ trans("Products::products/front_lang.export") }}</h3>
             </div>
             <div class="card-body">
-                <a href="{{ url('front/categories/export') }}"
-                    class="btn  btn-outline-dark ripple-surface-dark text-center">
-                    <i class="far fa-file-excel fa-2x" aria-hidden="true"></i><br>
-                    {{ trans('Categories::categories/front_lang.exportar_datos') }}
+                <a href="{{ url('front/products/export') }}" class="btn btn-app">
+                    <i class="far fa-file-excel" aria-hidden="true"></i>
+                    {{ trans('Products::products/front_lang.exportar_datos') }}
                 </a>
             </div>
         </div>
@@ -120,13 +122,14 @@
 <script src="{{ asset('/assets/front/vendor/datatables.net/js/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('/assets/front/vendor/datatables.net/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('/assets/front/vendor/datatables.net/js/responsive.bootstrap4.min.js') }}"></script>
+
 <!-- page script -->
 <script type="text/javascript">
     var oTable = '';
         var selected = [];
 
         $(function () {
-            oTable = $('#table_categories').DataTable({
+            oTable = $('#table_products').DataTable({
                 "stateSave": true,
                 "stateDuration": 60,
                 "processing": true,
@@ -134,7 +137,7 @@
                 "pageLength": 50,
                 ajax: {
                     "headers": {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
-                    url         : "{{ url('front/categories/list') }}",
+                    url         : "{{ url('front/products/list') }}",
                     type        : "POST"
                 },
                 order: [[ 2, "asc" ]],
@@ -147,15 +150,16 @@
                         sWidth          : '30px'
                     },
                     
+                      
                     {
-                        "title"         : "{!! trans('Categories::categories/front_lang.fields.active') !!}",
+                        "title"         : "{!! trans('Products::products/front_lang.fields.active') !!}",
                         orderable       : false,
                         searchable      : false,
                         data            : 'active',
                         sWidth          : '50px'
                     },
-                        {
-                                "title"         : "{!! trans('Categories::categories/front_lang.fields.code') !!}",
+                    {
+                                "title"         : "{!! trans('Products::products/front_lang.fields.code') !!}",
                                 orderable       : true,
                                 searchable      : true,
                                 data            : 'code',
@@ -164,7 +168,7 @@
                             }
                         ,
                         {
-                                "title"         : "{!! trans('Categories::categories/front_lang.fields.name') !!}",
+                                "title"         : "{!! trans('Products::products/front_lang.fields.name') !!}",
                                 orderable       : true,
                                 searchable      : true,
                                 data            : 'name',
@@ -172,8 +176,16 @@
                                 sWidth          : ''
                             }
                         ,
+                        {
+                            "title"         : "{!! trans('Products::products/front_lang.fields.price') !!}",
+                            orderable       : false,
+                            searchable      : false,
+                            data            : 'price',
+                            sWidth          : '50px'
+                        },
+                        
                     {
-                        "title"         : "{!! trans('Categories::categories/front_lang.acciones') !!}",
+                        "title"         : "{!! trans('Products::products/front_lang.acciones') !!}",
                         orderable       : false,
                         searchable      : false,
                         sWidth          : '110px',
@@ -182,11 +194,11 @@
 
                 ],
                 "fnDrawCallback": function ( oSettings ) {
-                    $('[data-toggle="popover"]').mouseover(function() {
+                    $('[data-bs-toggle="popover"]').mouseover(function() {
                         $(this).popover("show");
                     });
 
-                    $('[data-toggle="popover"]').mouseout(function() {
+                    $('[data-bs-toggle="popover"]').mouseout(function() {
                         $(this).popover("hide");
                     });
                 },
@@ -196,8 +208,8 @@
             });
 
             var state = oTable.state.loaded();
-            $('tfoot th',$('#table_categories')).each( function (colIdx) {
-                var title = $('tfoot th',$('#table_categories')).eq( $(this).index() ).text();
+            $('tfoot th',$('#table_products')).each( function (colIdx) {
+                var title = $('tfoot th',$('#table_products')).eq( $(this).index() ).text();
                 if (oTable.settings()[0]['aoColumns'][$(this).index()]['bSearchable']) {
                     var defecto = "";
                     if(state) defecto = state.columns[colIdx].search.search;
@@ -206,7 +218,7 @@
                 }
             });
 
-            $('#table_categories').on( 'keyup change','tfoot input', function (e) {
+            $('#table_products').on( 'keyup change','tfoot input', function (e) {
                 oTable
                     .column( $(this).parent().index()+':visible' )
                     .search( this.value )
@@ -275,7 +287,7 @@
         }
 
         // Handle click on checkbox to set state of "Select all" control
-        $('#table_categories tbody').on('change', 'input[type="checkbox"]', function(){
+        $('#table_products tbody').on('change', 'input[type="checkbox"]', function(){
             // If checkbox is not checked
             if(!this.checked){
                 var el = $('#chk_all').get(0);
@@ -298,13 +310,13 @@
         function deleteSelected() {
             var ids = getSelectedRecords();
             if(ids.length>0){
-                deleteElements('{{ url('front/categories/delete-selected') }}', ids);
+                deleteElements('{{ url('front/products/delete-selected') }}', ids);
             }
         }
 
         function getSelectedRecords() {
             var ids = [];
-            $('#table_categories input[type="checkbox"]').each(function(){
+            $('#table_products input[type="checkbox"]').each(function(){
                 // If checkbox is checked
                 if(this.checked){
                     ids.push(this.value);

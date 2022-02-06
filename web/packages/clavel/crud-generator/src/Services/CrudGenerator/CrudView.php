@@ -431,7 +431,6 @@ class CrudView
         $grid_row_cell = $this->crudGenerator->getStub($gridPath."grid_row_cell.stub");
 
 
-        
         // Leemos todos las filas y las columnas
         $gridFields = ModuleGrid::select(
                 [

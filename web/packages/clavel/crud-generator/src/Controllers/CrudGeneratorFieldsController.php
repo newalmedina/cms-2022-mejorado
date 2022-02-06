@@ -387,9 +387,8 @@ class CrudGeneratorFieldsController extends AdminController
                 $nameSpace = ModelSelector::extractNamespace($modelPath . ".php");
                 // Obtenemos el nombre del modelo
                 $modelName = explode(DIRECTORY_SEPARATOR, $modelPath);
-
-                $className =   str_replace("Models/", "", end($modelName));
-                // $className = explode("/", end($modelName))[1];
+                //$className = end($modelName);
+                $className = explode("/", end($modelName))[1];
 
                 // creamos una instancia del modelo para poder acceder a sus datos
                 $fullClassName = $nameSpace . "\\" . $className;

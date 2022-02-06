@@ -133,7 +133,7 @@ class CrudDatabase
 
                             $nameSpace = ModelSelector::extractNamespace($field->default_value . ".php");
                             $modelName = explode(DIRECTORY_SEPARATOR, $field->default_value);
-                            $className = explode("/", end($modelName))[0];
+                            $className = explode("/", end($modelName))[1];
 
                             $fullClassName = $nameSpace . "\\" . $className;
                             $model = new $fullClassName();

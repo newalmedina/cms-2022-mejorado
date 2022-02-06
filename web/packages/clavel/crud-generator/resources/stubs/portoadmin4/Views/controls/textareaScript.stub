@@ -44,5 +44,5 @@ function openImageControllerExt(callback, only_img) {
 
     var style = "width: 100%;padding: 50px; text-align: center;";
     $("#responsibe_images").html('<div id="spinner" class="overlay" style="'+style+'"><i class="fa fa-refresh fa-spin"></i></div>');
-    $("#responsibe_images").load("{{ url("front/media/viewer-simple/") }}/" + only_img);
+    $("#responsibe_images").load("{{ url("{{moduleTypeLowerCase}}/media/viewer-simple/") }}/" + only_img);
 }

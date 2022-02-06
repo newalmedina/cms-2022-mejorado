@@ -123,11 +123,11 @@
 
                 ],
                 "fnDrawCallback": function ( oSettings ) {
-                    $('[data-toggle="popover"]').mouseover(function() {
+                    $('[data-bs-toggle="popover"]').mouseover(function() {
                         $(this).popover("show");
                     });
 
-                    $('[data-toggle="popover"]').mouseout(function() {
+                    $('[data-bs-toggle="popover"]').mouseout(function() {
                         $(this).popover("hide");
                     });
                 },

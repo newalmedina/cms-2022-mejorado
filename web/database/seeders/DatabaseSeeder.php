@@ -55,5 +55,6 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call(CategoriesPermissionSeeder::class);
+        $this->call(ProductsPermissionSeeder::class);
     }
 }
