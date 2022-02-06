@@ -35,6 +35,24 @@
                 <h3 class="card-title">{{ trans("Categories::categories/front_lang.info_menu") }}</h3>
             </div>
             <div class="card-body">
+                @if (!empty($category->id))
+                <div class="row form-group pb-3">
+
+                    <div data-row="1" data-col="1" class="col-12">
+                        {{-- Text - name --}}
+                        <div class="form-group row">
+                            {!! Form::label('code', trans('Categories::categories/front_lang.fields.code'),
+                            array('class' => 'col-sm-2 col-form-label')) !!}
+                            <div class="col-sm-4">
+                                {!! Form::text('code', null , array('placeholder' =>
+                                trans('Categories::categories/front_lang.fields.code_helper'), 'class' =>
+                                'form-control', 'id' => 'code',"disabled"=>"disabled")) !!}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @endif
                 <div class="row form-group pb-3">
 
                     <div data-row="1" data-col="1" class="col-12">
@@ -139,7 +157,7 @@
 @endsection
 
 @section("foot_page")
-<script type="text/javascript" src="{{ asset(" assets/admin/vendor/tinymce/tinymce.min.js") }}"> </script>
+<script type="text/javascript" src="{{ asset('assets/admin/vendor/tinymce/tinymce.min.js') }}"> </script>
 
 <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 

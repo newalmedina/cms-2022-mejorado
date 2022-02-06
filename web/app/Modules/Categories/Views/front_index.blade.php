@@ -68,12 +68,14 @@
                             <th scope="col">
 
                             <th scope="col">
+                            <th scope="col">
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th scope="col">
                             <th scope="col">
                             <th scope="col">
                             <th scope="col">
@@ -151,6 +153,15 @@
                         data            : 'active',
                         sWidth          : '50px'
                     },
+                        {
+                                "title"         : "{!! trans('Categories::categories/front_lang.fields.code') !!}",
+                                orderable       : true,
+                                searchable      : true,
+                                data            : 'code',
+                                name            : 'c.code',
+                                sWidth          : '150px'
+                            }
+                        ,
                         {
                                 "title"         : "{!! trans('Categories::categories/front_lang.fields.name') !!}",
                                 orderable       : true,

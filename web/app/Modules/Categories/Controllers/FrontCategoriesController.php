@@ -101,7 +101,7 @@ class FrontCategoriesController extends FrontController
         }
 
         $category = new Category();
-        if (!$this->saveCategory($request, $category)) {
+        if (!$this->saveCategory($request, $category, "new")) {
 
             return redirect()->route('categories.create')
                 ->with('error', trans('Categories::categories/front_lang.save_ko'));
@@ -265,6 +265,7 @@ class FrontCategoriesController extends FrontController
             ->select(
                 array(
                     'c.id',
+                    'c.code',
                     'c.active',
                     'c.name'
                 )
@@ -330,7 +331,7 @@ class FrontCategoriesController extends FrontController
         return 0;
     }
 
-    private function saveCategory(Request $request, Category $category)
+    private function saveCategory(Request $request, Category $category, $action = "update")
     {
         try {
             DB::beginTransaction();
@@ -338,14 +339,14 @@ class FrontCategoriesController extends FrontController
             $category->description = $request->input("description", "");
             $category->active = $request->input("active", false);
             $category->name = $request->input("name", "");
+            if ($action == "new") {
+                $category->makeCode();
+            }
             $category->save();
-
-
-
-
 
             DB::commit();
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             return false;
         }
