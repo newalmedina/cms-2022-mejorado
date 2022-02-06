@@ -1,0 +1,9 @@
+@if(Auth::user()->isAbleTo('admin-{{modelNamePluralLowerCase}}'))
+    <li @if (Request::is('admin/{{modelNamePluralLowerCase}}*')) class="nav-active" @endif>
+        <a class="nav-link" href="{{ url('/admin/{{modelNamePluralLowerCase}}') }}">
+            {{__iconModule__}}
+            <span>{{ trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/admin_lang.{{modelNamePluralLowerCase}}') }}</span>
+        </a>
+    </li>
+@endif
+

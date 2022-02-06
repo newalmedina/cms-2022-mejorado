@@ -1,0 +1,8 @@
+
+@if(Auth::user()->isAbleTo('{{moduleTypeLowerCase}}-{{modelNamePluralLowerCase}}'))
+    <li @if (Request::is('{{moduleTypeLowerCase}}/{{modelNamePluralLowerCase}}*')) class="active" @endif>
+        <a href="{{ url('/{{moduleTypeLowerCase}}/{{modelNamePluralLowerCase}}') }}">{{__iconModule__}}
+            <span>{{ trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.{{modelNameSingularLowerCase}}') }}</span></a>
+    </li>
+@endif
+

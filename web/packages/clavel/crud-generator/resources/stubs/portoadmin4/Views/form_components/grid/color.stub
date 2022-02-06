@@ -1,0 +1,13 @@
+{{-- Color - {{fieldName}} --}}
+<div class="form-group row">
+    {!! Form::label('{{fieldName}}', trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.fields.{{fieldName}}'), array('class' => 'col-sm-2 col-form-label')) !!}
+    <div class="col-sm-10">
+        <div class="input-group {{fieldName}}_colorpicker colorpicker-element">
+            <span class="input-group-text">
+                <i class="fas fa-square"></i>
+            </span>
+            {!! Form::text('{{fieldName}}', null, array('placeholder' => trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.fields.{{fieldName}}_helper'), 'class' => 'form-control', 'id' => '{{fieldName}}')) !!}
+        </div>
+    </div>
+</div>
+

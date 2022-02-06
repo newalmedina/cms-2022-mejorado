@@ -1,0 +1,21 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+// Modulo {{modelName}}
+Route::group(
+    [
+        'namespace' => 'App\Modules\{{modelNamePluralUpperCase}}\Controllers',
+        'middleware' => ['web']
+    ],
+    function () {
+        Route::group(array('prefix' => '{{moduleTypeLowerCase}}', 'middleware' => ['web']), function () {
+            Route::get("{{modelNamePluralLowerCase}}/export", '{{moduleTypeUpperCase}}{{modelNamePluralUpperCase}}Controller@generateExcel');
+            Route::get('{{modelNamePluralLowerCase}}/state/{id}', '{{moduleTypeUpperCase}}{{modelNamePluralUpperCase}}Controller@setChangeState')->where('id', '[0-9]+');
+            Route::post("{{modelNamePluralLowerCase}}/list", '{{moduleTypeUpperCase}}{{modelNamePluralUpperCase}}Controller@getData');
+            Route::post("{{modelNamePluralLowerCase}}/delete-selected", '{{moduleTypeUpperCase}}{{modelNamePluralUpperCase}}Controller@destroySelected');
+            Route::resource('{{modelNamePluralLowerCase}}', '{{moduleTypeUpperCase}}{{modelNamePluralUpperCase}}Controller');
+        });
+    }
+);
+

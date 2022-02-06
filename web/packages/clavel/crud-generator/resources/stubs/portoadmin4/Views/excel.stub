@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">{{ trans("{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.export") }}</h3></div>
+            <div class="card-body">
+                <a href="{{ url('{{moduleTypeLowerCase}}/{{modelNamePluralLowerCase}}/export') }}" class="btn btn-app">
+                    <i class="far fa-file-excel" aria-hidden="true"></i>
+                    {{ trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.exportar_datos') }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

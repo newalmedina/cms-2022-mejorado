@@ -1,0 +1,162 @@
+@charset "UTF-8";
+/*----------------------------*/
+/* VALIDADOR DE CONTRASEÑAS   */
+/*----------------------------*/
+LI.invalid {
+  background: url(../img/invalid.png) no-repeat 0 50%;
+  padding-left: 22px !important;
+  line-height: 24px;
+  color: #ec3f41;
+}
+
+LI.valid {
+  background: url(../img/valid.png) no-repeat 0 50%;
+  padding-left: 22px !important;
+  line-height: 24px;
+  color: #3a7d34;
+}
+
+DIV#pswd_info, DIV#login_info {
+  position: absolute;
+  width: 350px;
+  margin-top: 20px;
+  padding: 15px;
+  background: #fefefe;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px #ccc;
+  border: 1px solid #ddd;
+  display: none;
+  font-size: 14px;
+  color: #444;
+  z-index: 9999;
+}
+
+DIV#pswd_info ul, DIV#pswd_info li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+DIV#pswd_info h4, DIV#login_info h4 {
+  font-size: 14px;
+  color: #444;
+}
+
+DIV#pswd_info::before, DIV#login_info::before {
+  content: "▲";
+  position: absolute;
+  top: -12px;
+  left: 45%;
+  font-size: 14px;
+  line-height: 14px;
+  color: #ddd;
+  text-shadow: none;
+  display: block;
+}
+
+DIV#pswd_info h4, DIV#login_info h4 {
+  margin: 0 0 10px 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+.datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-bottom {
+  width: 250px;
+  z-index: 1200 !important;
+}
+
+table.table-condensed {
+  width: 100%;
+}
+
+.nav-pills-flat > li > a {
+  border-radius: 0 !important;
+  border-top: 0;
+  border-left: 3px solid transparent;
+}
+
+.nav-pills-flat > li.active > a {
+  font-weight: 600;
+}
+
+.nav-pills-flat > li.active > a,
+.nav-pills-flat > li.active > a:hover {
+  border-left-color: #3c8dbc;
+}
+
+.login-box,
+.register-box {
+  width: 460px;
+}
+
+.login-footer {
+  text-align: right;
+  margin-top: 15px;
+}
+
+.login-footer i {
+  font-size: 20px;
+}
+
+.login-footer .love i {
+  font-size: 12px;
+  margin-left: 2px;
+  margin-right: 2px;
+  color: #e3342f;
+}
+
+.login-footer .love .alternate {
+  color: #031a6b !important;
+}
+
+/** SPINNER CREATION **/
+.loader {
+  position: relative;
+  text-align: center;
+  margin: 15px auto 35px auto;
+  z-index: 9999;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border: 10px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+.loader-txt p {
+  font-size: 13px;
+  color: #666;
+}
+
+.loader-txt p small {
+  font-size: 11.5px;
+  color: #999;
+}
+
+/** FIN SPINNER CREATION **/
+.router-link-exact-active {
+  background-color: #3c8dbc;
+  color: #ffffff !important;
+}
+
+.required:after {
+  content: "\f069";
+  /* this is your text. You can also use UTF-8 character codes as I do here */
+  font-family: "Font Awesome 5 Free";
+  vertical-align: middle;
+  font-size: 10px;
+  color: #e3342f;
+  white-space: nowrap;
+}

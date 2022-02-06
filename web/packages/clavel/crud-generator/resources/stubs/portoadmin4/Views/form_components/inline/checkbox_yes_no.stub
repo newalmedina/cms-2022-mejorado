@@ -1,0 +1,12 @@
+{{-- Checkbox yes/no - {{fieldName}} --}}
+<div class="form-group row">
+    {!! Form::label('{{fieldName}}', trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.fields.{{fieldName}}'), array('class' => 'col-sm-2 col-form-label')) !!}
+    <div class="col-md-10">
+        <div class="form-check">
+            <label>
+                {!! Form::checkbox('{{fieldName}}', 'my_checkbox_value', true, array('id'=>'{{fieldName}}')) !!}
+                {{ trans('{{modelNamePluralUpperCase}}::{{modelNamePluralLowerCase}}/{{moduleTypeLowerCase}}_lang.fields.{{fieldName}}_helper') }}
+            </label>
+        </div>
+    </div>
+</div>

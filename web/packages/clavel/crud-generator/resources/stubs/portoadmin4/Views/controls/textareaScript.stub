@@ -1,0 +1,48 @@
+tinymce.init({
+    selector: "textarea.textarea",
+    menubar: false,
+    height: 300,
+    resize:false,
+    convert_urls: false,
+    // extended_valid_elements : "a[class|name|href|target|title|onclick|rel],script[type|src],iframe[src|style|width|height|scrolling|marginwidth|marginheight|frameborder],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]",
+    plugins: [
+        "advlist autolink lists link image charmap print preview anchor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime media table paste hr",
+        "wordcount fullscreen nonbreaking visualblocks"
+    ],
+    content_css: [
+        {{--
+        // Ponemos aquí los css de front
+        '{{ url('assets/front/vendor/bootstrap/css/bootstrap.min.css') }}',
+        '{{ url('assets/front/vendor/fontawesome/css/font-awesome.min.css') }}',
+        '{{ url('assets/front/css/front.min.css') }}',
+        '{{ url('assets/front/css/theme.css') }}',
+        '{{ url('assets/front/css/theme-element.css') }}',
+        '{{ url('assets/front/vendor/fontawesome/css/font-awesome.min.css') }}'
+        --}}
+        ],
+    toolbar: "insertfile undo redo | styleselect | fontsizeselect | bold italic forecolor, backcolor | hr nonbreaking visualblocks | table |  alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link media image | code fullscreen",
+    file_picker_callback: function(callback, value, meta) {
+        openImageControllerExt(callback, '0');
+    }
+});
+
+function evtHidden(evt) {
+    evt.data($("#selectedFile").val());
+}
+
+
+function openImageControllerExt(callback, only_img) {
+    $('#bs-modal-images')
+        .one('hidden.bs.modal', callback, evtHidden)
+        .modal({
+        keyboard: false,
+        backdrop: 'static',
+        show: true
+    });
+
+    var style = "width: 100%;padding: 50px; text-align: center;";
+    $("#responsibe_images").html('<div id="spinner" class="overlay" style="'+style+'"><i class="fa fa-refresh fa-spin"></i></div>');
+    $("#responsibe_images").load("{{ url("front/media/viewer-simple/") }}/" + only_img);
+}

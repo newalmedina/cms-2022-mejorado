@@ -1,0 +1,108 @@
+// Fonts
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import "variables";
+@import "passwords";
+
+// Bootstrap Datepicker
+.datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-bottom { width: 250px; z-index: 1200!important; }
+table.table-condensed { width: 100%; }
+
+// LTE Modificado
+.nav-pills-flat > li > a {
+    border-radius: 0 !important;
+    border-top: 0;
+    border-left: 3px solid transparent;
+}
+
+.nav-pills-flat > li.active > a {
+    font-weight: 600;
+}
+
+.nav-pills-flat > li.active > a,
+.nav-pills-flat > li.active > a:hover {
+    border-left-color: $blue;
+}
+
+// Otros
+.login-box,
+.register-box {
+    width: 460px;
+}
+
+.login-footer {
+    text-align: right;
+    margin-top: 15px;
+}
+
+.login-footer i {
+    font-size: 20px;
+}
+
+.login-footer .love i {
+    font-size: 12px;
+    margin-left: 2px;
+    margin-right: 2px;
+    color: $red;
+}
+
+.login-footer .love .alternate {
+    color: #031a6b !important;
+}
+
+/** SPINNER CREATION **/
+.loader {
+    position: relative;
+    text-align: center;
+    margin: 15px auto 35px auto;
+    z-index: 9999;
+    display: block;
+    width: 80px;
+    height: 80px;
+    border: 10px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    border-top-color: #000;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.loader-txt p {
+    font-size: 13px;
+    color: #666;
+}
+
+.loader-txt p small {
+    font-size: 11.5px;
+    color: #999;
+}
+/** FIN SPINNER CREATION **/
+
+// Menu lateral
+.router-link-exact-active {
+    background-color: $blue;
+    color: #ffffff !important;
+}
+
+// form
+.required:after {
+    content: "\f069"; /* this is your text. You can also use UTF-8 character codes as I do here */
+    font-family: "Font Awesome 5 Free";
+    //padding-left: 5px !important;
+    vertical-align: middle;
+    font-size: 10px;
+    color: $red;
+    white-space: nowrap;
+}

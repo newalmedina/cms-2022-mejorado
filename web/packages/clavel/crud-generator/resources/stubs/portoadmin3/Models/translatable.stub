@@ -1,0 +1,10 @@
+    use \Astrotomic\Translatable\Translatable;
+
+    public $translationModel = {{modelName}}Translation::class;
+
+    public $translationForeignKey = "{{modelNameSingularLowerCase}}_id";
+
+    public $translatedAttributes = [
+        {{__translatable_fields__}}
+    ];
+    public $useTranslationFallback = true;

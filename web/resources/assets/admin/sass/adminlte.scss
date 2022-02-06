@@ -1,0 +1,18 @@
+// Adminlte
+@import 'variables';
+
+@import '~admin-lte/build/scss/adminlte.scss';
+
+
+.bg-info, .bg-info > a {
+    color: #ffffff !important;
+}
+
+.navbar-dark {
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    background-color: transparent;
+}

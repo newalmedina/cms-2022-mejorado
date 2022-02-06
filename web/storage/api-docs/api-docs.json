@@ -1,0 +1,3119 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Clavel API",
+        "description": "Clavel OpenApi description.  Developed by Aduxia\n[http://www.aduxia.com](http://www.aduxia.com) based on\n[http://swagger.io](http://swagger.io).",
+        "termsOfService": "http://www.aduxia.com",
+        "contact": {
+            "email": "ing.newal.medina@outlook.com"
+        },
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://psms.test"
+        }
+    ],
+    "paths": {
+        "/api/v1/auth/signin": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Signin",
+                "description": "User's credentials",
+                "operationId": "signin",
+                "requestBody": {
+                    "description": "User's credentials",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "ing.newal.medina@outlook.com",
+                                    "password": "secret"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "required": [
+                                                "token"
+                                            ],
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/signout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Signout",
+                "description": "Invalidate authentication token",
+                "operationId": "signout",
+                "responses": {
+                    "204": {
+                        "description": "Empty response"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/need-reset-password": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Retrieve if the user needs to reset his password",
+                "description": "Retrieve if the user needs to reset his password",
+                "operationId": "need-reset-password-get",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "need_reset_password"
+                                    ],
+                                    "properties": {
+                                        "need_reset_password": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset password.",
+                "description": "The user can change his password.",
+                "operationId": "need-reset-password-post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "new_password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "password": "password",
+                                    "new_password": "new_password"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Empty response",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/verify-authorization-token": {
+            "head": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Verify authorization token",
+                "description": "Verify authorization token",
+                "operationId": "verify-authorization-token",
+                "responses": {
+                    "204": {
+                        "description": "Empty response. The request does not update the token,\n     *          it just verifies if the token is valid."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/profile": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Retrieve the user's profile",
+                "description": "Retrieve the user's profile",
+                "operationId": "profile-get",
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update the user's profile",
+                "description": "Update the user's profile",
+                "operationId": "profile-patch",
+                "requestBody": {
+                    "description": "User's credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "password"
+                                        ],
+                                        "properties": {
+                                            "password": {
+                                                "description": "User's password to confirm his identity",
+                                                "type": "string",
+                                                "format": "password"
+                                            },
+                                            "new_password": {
+                                                "type": "string",
+                                                "format": "password"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user/password/email": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Require the reset password mail",
+                "description": "Using the user's email, the system will send an email with a 5 digit\n     *              code to reset the password.",
+                "operationId": "password_email",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "ing.newal.medina@outlook.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Empty response"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/user/password/token": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get token to reset password.",
+                "description": "Get token to reset password.",
+                "operationId": "password_token",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "code": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "code": "12345"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "token"
+                                    ],
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/user/password/reset": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset password.",
+                "description": "Reset password.",
+                "operationId": "password_reset",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "token"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    },
+                                    "token": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "ing.newal.medina@outlook.com",
+                                    "password": "password",
+                                    "password_confirmation": "password",
+                                    "token": "d5c0c1f3bad74d08495fad37cb00ed2213aa83740b4947d2cc6c85ab12030eb8"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Empty response"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/centers": {
+            "get": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "User's centers",
+                "description": "Retrieve the list of centers",
+                "operationId": "center-index",
+                "responses": {
+                    "200": {
+                        "description": "Full center list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Center"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "Create a new center",
+                "description": "Create a new center",
+                "operationId": "center-store",
+                "requestBody": {
+                    "description": "center data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Center"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Center create",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Center"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/centers/list": {
+            "get": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "User's centers",
+                "description": "Retrieve the list of centers",
+                "operationId": "center-list",
+                "parameters": [
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Needs pagination on/off",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "List page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 64
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full center list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Center"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "206": {
+                        "description": "Paginated data",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Center"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/centers/{id}": {
+            "get": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "Center detail",
+                "description": "Retrieve a specific center",
+                "operationId": "center-show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Center ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Center"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "Delete an center",
+                "description": "Delete an center",
+                "operationId": "center-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Center ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Center update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Centers"
+                ],
+                "summary": "Update an center",
+                "description": "Update an center",
+                "operationId": "center-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Center ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Center data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Center"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Center update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Center"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/country/{country}/ccaas": {
+            "get": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "User's ccaas",
+                "description": "Retrieve the list of ccaas",
+                "operationId": "ccaa-index",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full ccaa list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Ccaa"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/country/{country}/ccaas/list": {
+            "get": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "User's ccaas",
+                "description": "Retrieve the list of ccaas",
+                "operationId": "ccaa-list",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Needs pagination on/off",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "List page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 64
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full ccaa list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Ccaa"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "206": {
+                        "description": "Paginated data",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Ccaa"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/ccaas": {
+            "post": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "Create a new ccaa",
+                "description": "Create a new ccaa",
+                "operationId": "ccaa-store",
+                "requestBody": {
+                    "description": "ccaa data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Ccaa"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ccaa create",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Ccaa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/ccaas/{id}": {
+            "get": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "Ccaa detail",
+                "description": "Retrieve a specific ccaa",
+                "operationId": "ccaa-show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ccaa ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Ccaa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "Delete an ccaa",
+                "description": "Delete an ccaa",
+                "operationId": "ccaa-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ccaa ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Ccaa update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Ccaas"
+                ],
+                "summary": "Update an ccaa",
+                "description": "Update an ccaa",
+                "operationId": "ccaa-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ccaa ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Ccaa data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Ccaa"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ccaa update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Ccaa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/province/{province}/cities": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "User's cities",
+                "description": "Retrieve the list of cities",
+                "operationId": "city-index",
+                "parameters": [
+                    {
+                        "name": "province",
+                        "in": "path",
+                        "description": "Province ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full city list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/City"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/province/{province}/cities/list": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "User's cities",
+                "description": "Retrieve the list of cities",
+                "operationId": "city-list",
+                "parameters": [
+                    {
+                        "name": "province",
+                        "in": "path",
+                        "description": "Province ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Needs pagination on/off",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "List page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 64
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full city list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/City"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "206": {
+                        "description": "Paginated data",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/City"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/cities": {
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Create a new city",
+                "description": "Create a new city",
+                "operationId": "city-store",
+                "requestBody": {
+                    "description": "city data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/City"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "City create",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/City"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/cities/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "City detail",
+                "description": "Retrieve a specific city",
+                "operationId": "city-show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/City"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Delete an city",
+                "description": "Delete an city",
+                "operationId": "city-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "City update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Update an city",
+                "description": "Update an city",
+                "operationId": "city-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "City data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/City"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "City update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/City"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/countries": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "User's countries",
+                "description": "Retrieve the list of countries",
+                "operationId": "country-index",
+                "responses": {
+                    "200": {
+                        "description": "Full country list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Country"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Create a new country",
+                "description": "Create a new country",
+                "operationId": "country-store",
+                "requestBody": {
+                    "description": "country data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Country"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Country create",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Country"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/countries/list": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "User's countries",
+                "description": "Retrieve the list of countries",
+                "operationId": "country-list",
+                "parameters": [
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Needs pagination on/off",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "List page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 64
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full country list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Country"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "206": {
+                        "description": "Paginated data",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Country"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/countries/{id}": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Country detail",
+                "description": "Retrieve a specific country",
+                "operationId": "country-show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Country"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Delete an country",
+                "description": "Delete an country",
+                "operationId": "country-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Country update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Update an country",
+                "description": "Update an country",
+                "operationId": "country-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Country data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Country"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Country update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Country"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/country/{country}/provinces": {
+            "get": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "User's provinces",
+                "description": "Retrieve the list of provinces",
+                "operationId": "province-index",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full province list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Province"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/country/{country}/provinces/list": {
+            "get": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "User's provinces",
+                "description": "Retrieve the list of provinces",
+                "operationId": "province-list",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "path",
+                        "description": "Country ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "description": "Needs pagination on/off",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "List page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Size of page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 64
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full province list",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Province"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "206": {
+                        "description": "Paginated data",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "nullable": false,
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Province"
+                                            },
+                                            "minItems": 0,
+                                            "uniqueItems": true
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/provinces": {
+            "post": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "Create a new province",
+                "description": "Create a new province",
+                "operationId": "province-store",
+                "requestBody": {
+                    "description": "province data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Province"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Province create",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Province"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/provinces/{id}": {
+            "get": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "Province detail",
+                "description": "Retrieve a specific province",
+                "operationId": "province-show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Province ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Authentication token",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Province"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "Delete an province",
+                "description": "Delete an province",
+                "operationId": "province-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Province ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Province update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Provinces"
+                ],
+                "summary": "Update an province",
+                "description": "Update an province",
+                "operationId": "province-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Province ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Province data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Province"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Province update",
+                        "headers": {
+                            "X-Authorization-Token": {
+                                "$ref": "#/components/headers/X-Authorization-Token"
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "data"
+                                    ],
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Province"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Date": {
+                "description": "\nThe Date in ISO 8601 format.\nYYYY-MM-DD",
+                "type": "string",
+                "example": "2018-10-16"
+            },
+            "Time": {
+                "description": "\nThe Time in ISO 8601 format.\n<user's local time>±<time representation of the user's timezone>\nhh:mm:ss±hh:mm:ss",
+                "type": "string",
+                "example": "11:15:00+01:00"
+            },
+            "DateTime": {
+                "description": "\nThe DateTime in ISO 8601 format.\n<YYYY-MM-DD>T<user's local time>±<time representation of the user's timezone>\nYYYY-MM-DDThh:mm:ss±hh:mm:ss",
+                "type": "string",
+                "example": "2018-10-17T11:15:00+01:00"
+            },
+            "Error": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "id",
+                    "name",
+                    "surname",
+                    "email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "second_surname": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "readOnly": true
+                    },
+                    "province": {
+                        "type": "string"
+                    },
+                    "zip_code": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AccessTime": {
+                "required": [
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationLinks": {
+                "required": [
+                    "first",
+                    "last",
+                    "prev",
+                    "next"
+                ],
+                "properties": {
+                    "first": {
+                        "description": "Url of the first page",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "http://clavel.test/api/v1/notifications?page=1"
+                    },
+                    "last": {
+                        "description": "Url of the last page",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "http://clavel.test/api/v1/notifications?page=10"
+                    },
+                    "prev": {
+                        "description": "Url of the previous page",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": null
+                    },
+                    "next": {
+                        "description": "Url of the next page",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "http://clavel.test/api/v1/notifications?page=2"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "required": [
+                    "current_page",
+                    "from",
+                    "last_page",
+                    "path",
+                    "per_page",
+                    "to",
+                    "total"
+                ],
+                "properties": {
+                    "current_page": {
+                        "description": "Number or current page",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 1
+                    },
+                    "from": {
+                        "description": "Number or from record",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 1
+                    },
+                    "last_page": {
+                        "description": "Number or last page",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 10
+                    },
+                    "path": {
+                        "description": "Path of the pagination",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "http://clavel.test/api/v1/notifications"
+                    },
+                    "per_page": {
+                        "description": "Number or records per page",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 15
+                    },
+                    "to": {
+                        "description": "Number or to record",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 15
+                    },
+                    "total": {
+                        "description": "Total of records",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true,
+                        "example": 150
+                    }
+                },
+                "type": "object"
+            },
+            "Center": {
+                "required": [
+                    "title",
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "alert": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "Ccaa": {
+                "required": [
+                    "title",
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "alert": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "City": {
+                "required": [
+                    "title",
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "alert": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "Country": {
+                "required": [
+                    "title",
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "alert": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "Province": {
+                "required": [
+                    "title",
+                    "start",
+                    "end"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "end": {
+                        "$ref": "#/components/schemas/DateTime"
+                    },
+                    "alert": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "Unauthorized": {
+                "description": "Authentication is not valid.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "401",
+                            "message": "Unauthorized"
+                        }
+                    }
+                }
+            },
+            "InternalServerError": {
+                "description": "Internal Server Error.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "500",
+                            "message": "Internal Server Error."
+                        }
+                    }
+                }
+            },
+            "Forbidden": {
+                "description": "Forbidden.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "403",
+                            "message": "Forbidden"
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "description": "Resource not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "404",
+                            "message": "Not Found"
+                        }
+                    }
+                }
+            },
+            "UnprocessableEntity": {
+                "description": "Input data is not valid. We will define a more appropiate schema model",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "422",
+                            "message": "Input data is not valid. We will define a more appropiate schema model"
+                        }
+                    }
+                }
+            },
+            "RangeNotSatisfiable": {
+                "description": "Range Not Satisfiable",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "example": {
+                            "code": "416",
+                            "message": "Range Not Satisfiable"
+                        }
+                    }
+                }
+            }
+        },
+        "headers": {
+            "X-Authorization-Token": {
+                "description": "Updated authorization token",
+                "schema": {
+                    "schema": "AuthorizationToken",
+                    "type": "string"
+                }
+            },
+            "Last-Modified": {
+                "description": "<day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT",
+                "schema": {
+                    "schema": "Last-Modified",
+                    "type": "string"
+                }
+            }
+        },
+        "securitySchemes": {
+            "Authorization": {
+                "type": "http",
+                "name": "Bearer",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Operations about authentication"
+        },
+        {
+            "name": "User",
+            "description": "Operations about user"
+        },
+        {
+            "name": "Centers",
+            "description": "Operations about centers"
+        },
+        {
+            "name": "Ccaas",
+            "description": "Operations about ccaas"
+        },
+        {
+            "name": "Cities",
+            "description": "Operations about cities"
+        },
+        {
+            "name": "Countries",
+            "description": "Operations about countries"
+        },
+        {
+            "name": "Provinces",
+            "description": "Operations about provinces"
+        }
+    ],
+    "security": [
+        []
+    ]
+}

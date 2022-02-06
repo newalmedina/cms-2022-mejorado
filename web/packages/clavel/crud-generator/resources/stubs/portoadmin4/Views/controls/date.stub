@@ -1,0 +1,7 @@
+    $('#{{__columnName__}}').datepicker({
+        isRTL: false,
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        language: 'es',
+    });
+
