@@ -241,7 +241,7 @@ return [
         'ExcelHelper' => App\Helpers\Clavel\ExcelHelper::class,
         'Settings' => App\Facades\Settings::class,
         'Skin' => App\Facades\Skin::class,
-
+        'Utils' => App\Helpers\Utils::class,
     ],
 
 ];

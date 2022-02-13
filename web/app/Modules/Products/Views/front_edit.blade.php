@@ -5,6 +5,10 @@
 @stop
 
 @section('head_page')
+<link href="{{  asset('/assets/front/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+    type="text/css" />
+<link rel=“stylesheet” href="{{ asset("
+    assets/admin/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css") }}">
 
 @stop
 
@@ -32,7 +36,7 @@
             </div>
             <div class="card-body">
                 @if (!empty($product->id))
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="1" data-col="1" class="col-12">
                         {{-- Text - code --}}
@@ -49,7 +53,7 @@
                     </div>
                 </div>
                 @endif
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="2" data-col="1" class="col-12">
                         {{-- belongsToRelationship - category --}}
@@ -76,7 +80,7 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="3" data-col="1" class="col-12">
                         {{-- Text - name --}}
@@ -92,7 +96,7 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="3" data-col="1" class="col-12">
                         {{-- Text - name --}}
@@ -109,7 +113,7 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="4" data-col="1" class="col-12">
                         {{-- Money - price --}}
@@ -123,14 +127,14 @@
                                     </span>
                                     {!! Form::text('price', null , array('placeholder' =>
                                     trans('Products::products/front_lang.fields.price_helper'), 'class' =>
-                                    'form-control', 'id' => 'price')) !!}
+                                    'form-control calculateTaxes', 'id' => 'price')) !!}
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="5" data-col="1" class="col-12">
                         {{-- Radio yes/no - has_taxes --}}
@@ -141,7 +145,7 @@
                                 <div class="form-check form-check-inline">
                                     <label>
                                         {!! Form::radio('has_taxes', 0, true, array('id'=>'has_taxes_0', 'class' =>
-                                        'form-check-input')) !!}
+                                        'has_taxes form-check-input')) !!}
                                         {!! Form::label('has_taxes_0', trans('general/front_lang.no'), array('class' =>
                                         'form-check-label')) !!}
                                     </label>
@@ -149,7 +153,7 @@
                                 <div class="form-check form-check-inline">
                                     <label>
                                         {!! Form::radio('has_taxes', 1, false, array('id'=>'has_taxes_1', 'class' =>
-                                        'form-check-input')) !!}
+                                        'has_taxes form-check-input')) !!}
                                         {!! Form::label('has_taxes_1', trans('general/front_lang.yes'), array('class' =>
                                         'form-check-label')) !!}
                                     </label>
@@ -159,23 +163,50 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div id="taxesContainer"
+                    class="@if($product->has_taxes==0 || empty($product->has_taxes) ) d-none @endif">
+                    <div class="row form-group  ">
 
-                    <div data-row="6" data-col="1" class="col-12">
-                        {{-- Float - taxes --}}
-                        <div class="form-group row">
-                            {!! Form::label('taxes', trans('Products::products/front_lang.fields.taxes'), array('class'
-                            => 'col-sm-2 col-form-label')) !!}
-                            <div class="col-sm-4">
-                                {!! Form::text('taxes', null , array('placeholder' =>
-                                trans('Products::products/front_lang.fields.taxes_helper'), 'class' => 'form-control',
-                                'id' => 'taxes')) !!}
+                        <div data-row="6" data-col="1" class="col-12">
+                            {{-- Float - taxes --}}
+                            <div class="form-group row">
+                                {!! Form::label('taxes', trans('Products::products/front_lang.fields.taxes'),
+                                array('class'
+                                => 'col-sm-2 col-form-label')) !!}
+                                <div class="col-sm-4">
+                                    {!! Form::text('taxes', null , array('placeholder' =>
+                                    trans('Products::products/front_lang.fields.taxes_helper'), 'class' =>
+                                    'form-control calculateTaxes',
+                                    'id' => 'taxes')) !!}
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
+                    </div>
+                    <div class="row form-group  ">
+
+                        <div data-row="7" data-col="1" class="col-12">
+                            {{-- Money - real_price --}}
+                            <div class="form-group row">
+                                {!! Form::label('taxes_amount',
+                                trans('Products::products/front_lang.fields.taxes_amount'),
+                                array('class' => 'col-sm-2 col-form-label')) !!}
+                                <div class="col-sm-4">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-euro-sign"></i>
+                                        </span>
+                                        {!! Form::text('taxes_amount', null , array('placeholder' =>
+                                        trans('Products::products/front_lang.fields.taxes_amount_helper'), 'class' =>
+                                        'form-control', 'id' => 'taxes_amount','readonly'=>'readonly')) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="7" data-col="1" class="col-12">
                         {{-- Money - real_price --}}
@@ -196,7 +227,7 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="8" data-col="1" class="col-12">
                         {{-- TextArea - description --}}
@@ -211,7 +242,7 @@
 
                     </div>
                 </div>
-                <div class="row form-group pb-3">
+                <div class="row form-group  ">
 
                     <div data-row="9" data-col="1" class="col-12">
                         {{-- Radio yes/no - active --}}
@@ -283,8 +314,8 @@
 @endsection
 
 @section("foot_page")
-<script type="text/javascript" src="{{ asset(" assets/front/vendor/tinymce/tinymce.min.js") }}">
-</script>
+<script type="text/javascript" src="{{ asset('assets/admin/vendor/tinymce/tinymce.min.js') }}"> </script>
+
 <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
 
 
@@ -345,6 +376,31 @@ function openImageControllerExt(callback, only_img) {
             event.preventDefault();
             $('#form_return').val(1);
             $('#formData').submit();
+        } );
+        
+        $('.has_taxes').on( 'click', function (event) {
+           if($(this).val()==1){
+            $('#taxesContainer').removeClass("d-none");
+            $('#taxesContainer').addClass("d-block");
+           }else{
+            $('#taxesContainer').removeClass("d-block");
+            $('#taxesContainer').addClass("d-none");
+           }
+        } );
+
+        $('.calculateTaxes').on( 'keyup', function (event) {
+            var price= parseFloat($("#price").val());
+            var taxes= parseFloat($("#taxes").val());
+
+            var taxes_amount= 0         
+            var real_price= 0         
+           
+           if($.isNumeric(price) &&  $.isNumeric(taxes)){
+             taxes_amount= (price*taxes)/100;     
+             real_price= taxes_amount + price;  
+           }
+            $("#taxes_amount").val(taxes_amount);
+            $("#real_price").val(real_price);
         } );
 
 </script>

@@ -25,6 +25,7 @@ class CreateProductsTable extends Migration
                 $table->decimal('price', 15, 2);
                 $table->boolean('has_taxes')->default(0);
                 $table->float('taxes', 15, 2)->nullable();
+                $table->float('taxes_amount', 15, 2)->nullable();
                 $table->decimal('real_price', 15, 2)->nullable();
                 $table->text('description')->nullable();
                 $table->boolean('active')->default(0);

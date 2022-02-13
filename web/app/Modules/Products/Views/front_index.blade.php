@@ -69,7 +69,10 @@
                             <th scope="col">
                             <th scope="col">
                             <th scope="col">
+                            <th scope="col">
 
+                            <th scope="col">
+                            <th scope="col">
                             <th scope="col">
                         </tr>
                     </thead>
@@ -77,6 +80,9 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th scope="col">
+                            <th scope="col">
+                            <th scope="col">
                             <th scope="col">
                             <th scope="col">
                             <th scope="col">
@@ -103,8 +109,9 @@
                 <h3 class="card-title">{{ trans("Products::products/front_lang.export") }}</h3>
             </div>
             <div class="card-body">
-                <a href="{{ url('front/products/export') }}" class="btn btn-app">
-                    <i class="far fa-file-excel" aria-hidden="true"></i>
+                <a href="{{ url('front/products/export') }}"
+                    class="btn  btn-outline-dark ripple-surface-dark text-center">
+                    <i class="far fa-file-excel fa-2x" aria-hidden="true"></i><br>
                     {{ trans('Products::products/front_lang.exportar_datos') }}
                 </a>
             </div>
@@ -164,7 +171,7 @@
                                 searchable      : true,
                                 data            : 'code',
                                 name            : 'c.code',
-                                sWidth          : '150px'
+                                sWidth          : '120px'
                             }
                         ,
                         {
@@ -181,7 +188,28 @@
                             orderable       : false,
                             searchable      : false,
                             data            : 'price',
-                            sWidth          : '50px'
+                            sWidth          : '100px'
+                        },
+                        {
+                            "title"         : "{!! trans('Products::products/front_lang.fields.taxes') !!}",
+                            orderable       : false,
+                            searchable      : false,
+                            data            : 'taxes',
+                            sWidth          : '100px'
+                        },
+                        {
+                            "title"         : "{!! trans('Products::products/front_lang.fields.taxes_amount') !!}",
+                            orderable       : false,
+                            searchable      : false,
+                            data            : 'taxes_amount',
+                            sWidth          : '100px'
+                        },
+                        {
+                            "title"         : "{!! trans('Products::products/front_lang.fields.real_price') !!}",
+                            orderable       : false,
+                            searchable      : false,
+                            data            : 'real_price',
+                            sWidth          : '100px'
                         },
                         
                     {

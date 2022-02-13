@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Modules\Products\Models\Product;
 use Clavel\Basic\Models\Models\Media;
 use App\Helpers\Clavel\ExcelHelper;
+use App\Helpers\Utils;
 use App\Modules\Categories\Models\Category;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -45,6 +46,7 @@ class FrontProductsController extends FrontController
         if (!auth()->user()->isAbleTo('front-products-list')) {
             app()->abort(403);
         }
+
 
         $page_title = trans("Products::products/front_lang.products");
 
@@ -268,6 +270,7 @@ class FrontProductsController extends FrontController
                     'c.code',
                     'c.price',
                     'c.taxes',
+                    'c.taxes_amount',
                     'c.real_price',
                     'c.category_id',
                     'c.active',
@@ -347,19 +350,30 @@ class FrontProductsController extends FrontController
 
             $product->description = $request->input("description", "");
             $product->price = $request->input("price", 0.0);
-            $product->taxes = $request->input("taxes", 0.0);
             $product->amount = $request->input("amount", 0.0);
-            $product->real_price = (($product->price *  $product->taxes) / 100) + $product->price;
-            //  $product->real_price = $request->input("real_price", 0.0);
+
             $product->category_id = $request->input("category_id", null);
             $product->active = $request->input("active", false);
-            $product->has_taxes = $request->input("has_taxes", false);
             $product->name = $request->input("name", "");
+            $product->has_taxes = $request->input("has_taxes", false);
+            $taxes_amount = 0;
+            $taxes = 0;
+            $real_price =   $product->price;
+
+            if ($product->has_taxes == 1) {
+                $taxes = $request->input("taxes", 0.0);
+                $taxes_amount =  Utils::calculateTaxes($product->price, $taxes);
+                $real_price =   Utils::priceWhitTaxes($product->price, $taxes_amount);
+            }
+
+            $product->taxes = $taxes;
+            $product->taxes_amount = $taxes_amount;
+            $product->real_price = $real_price;
+
             if ($action == "new") {
                 $product->makeCode();
             }
             $product->save();
-
             DB::commit();
         } catch (\Exception $e) {
             dd($e);

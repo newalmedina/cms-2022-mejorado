@@ -14,13 +14,13 @@ class FrontProductsRequest extends FormRequest
         parent::__construct();
 
 
-        $this->validationRules['description'] = 'required';
+        //$this->validationRules['description'] = 'required';
         $this->validationRules['price'] = 'required|numeric';
         $this->validationRules['amount'] = 'required|integer';
         $this->validationRules['category_id'] = 'required';
         $this->validationRules['active'] = 'required';
         $this->validationRules['has_taxes'] = 'required';
-        $this->validationRules['taxes'] = 'numeric';
+        $this->validationRules['taxes'] = 'numeric|nullable|required_if:has_taxes,1';
         $this->validationRules['name'] = 'required';
     }
 
@@ -55,6 +55,7 @@ class FrontProductsRequest extends FormRequest
             'active.required' => trans('Products::products/front_lang.fields.active_required'),
             'has_taxes.required' => trans('Products::products/front_lang.fields.has_taxes_required'),
             'taxes.numeric' => trans('Products::products/front_lang.fields.taxes_numeric'),
+            'taxes.required_if' => trans('Products::products/front_lang.fields.taxes_required_if'),
             'name.required' => trans('Products::products/front_lang.fields.name_required'),
             'amount.integer' => trans('Products::products/front_lang.fields.amount_integer')
         );
